@@ -6,10 +6,10 @@
  */
 package org.mule.runtime.core.processor;
 
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import static org.mule.runtime.core.util.ClassUtils.isConsumable;
 import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.MessageExchangePattern;
-import org.mule.runtime.core.OptimizedRequestContext;
 import org.mule.runtime.core.VoidMuleEvent;
 import org.mule.runtime.core.api.MessagingException;
 import org.mule.runtime.core.api.MuleEvent;
@@ -141,7 +141,7 @@ public class AsyncDelegateMessageProcessor extends AbstractMessageProcessorOwner
             // Clone event, make it async and remove ReplyToHandler
             MuleEvent newEvent = new DefaultMuleEvent(message, event, false, false, MessageExchangePattern.ONE_WAY, null);
             // Update RequestContext ThreadLocal for backwards compatibility
-            OptimizedRequestContext.unsafeSetEvent(newEvent);
+            setCurrentEvent(newEvent);
             target.process(newEvent);
         }
         return VoidMuleEvent.getInstance();

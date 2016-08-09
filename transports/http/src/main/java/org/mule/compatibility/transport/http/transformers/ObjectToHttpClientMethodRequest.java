@@ -9,6 +9,7 @@ package org.mule.compatibility.transport.http.transformers;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.mule.compatibility.transport.http.HttpConnector.HTTP_PARAMS_PROPERTY;
 import static org.mule.compatibility.transport.http.HttpConstants.HEADER_CONTENT_TYPE;
+import static org.mule.runtime.core.DefaultMuleEvent.getCurrentEvent;
 import org.mule.compatibility.core.api.endpoint.ImmutableEndpoint;
 import org.mule.compatibility.core.api.transformer.EndpointAwareTransformer;
 import org.mule.compatibility.transport.http.HttpConnector;
@@ -20,7 +21,7 @@ import org.mule.compatibility.transport.http.multipart.MultiPartInputStream;
 import org.mule.compatibility.transport.http.multipart.PartDataSource;
 import org.mule.runtime.api.metadata.DataType;
 import org.mule.runtime.api.metadata.MediaType;
-import org.mule.runtime.core.RequestContext;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.MuleMessage;
 import org.mule.runtime.core.api.config.MuleProperties;
@@ -406,7 +407,7 @@ public class ObjectToHttpClientMethodRequest extends AbstractMessageTransformer 
             }
             else if (src instanceof OutputHandler)
             {
-                final MuleEvent eventFromContext = RequestContext.getEvent();
+                final MuleEvent eventFromContext = getCurrentEvent();
                 postMethod.setRequestEntity(new StreamPayloadRequestEntity((OutputHandler) src, eventFromContext));
             }
             else

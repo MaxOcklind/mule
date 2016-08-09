@@ -7,8 +7,9 @@
 package org.mule.compatibility.transport.http;
 
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
+import static org.mule.runtime.core.DefaultMuleEvent.getCurrentEvent;
 import org.mule.runtime.api.metadata.DataType;
-import org.mule.runtime.core.RequestContext;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.api.MuleContext;
 import org.mule.runtime.core.api.MuleMessage;
 import org.mule.runtime.core.message.OutputHandler;
@@ -321,7 +322,7 @@ public class HttpResponse
         
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         
-        outputHandler.write(RequestContext.getEvent(), out);
+        outputHandler.write(getCurrentEvent(), out);
         
         return new String(out.toByteArray(), getCharset());
     }

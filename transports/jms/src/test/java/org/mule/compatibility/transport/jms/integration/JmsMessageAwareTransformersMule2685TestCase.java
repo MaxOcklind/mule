@@ -9,10 +9,11 @@ package org.mule.compatibility.transport.jms.integration;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import org.mule.compatibility.core.routing.outbound.ExpressionRecipientList;
 import org.mule.compatibility.transport.jms.transformers.AbstractJmsTransformer;
 import org.mule.runtime.api.metadata.DataType;
-import org.mule.runtime.core.RequestContext;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.MuleMessage;
 import org.mule.runtime.core.transformer.AbstractMessageTransformer;
@@ -51,7 +52,7 @@ public class JmsMessageAwareTransformersMule2685TestCase extends AbstractJmsFunc
     @Override
     protected void doTearDown() throws Exception
     {
-        RequestContext.setEvent(null);
+        setCurrentEvent(null);
         if (session != null)
         {
             session.close();
@@ -62,7 +63,7 @@ public class JmsMessageAwareTransformersMule2685TestCase extends AbstractJmsFunc
     @Test
     public void testMessageAwareTransformerChainedWithObjectToJMSMessage() throws Exception
     {
-        RequestContext.setEvent(getTestEvent("test"));
+        setCurrentEvent(getTestEvent("test"));
 
         MuleMessage message = getTestMuleMessage("This is a test TextMessage");
 

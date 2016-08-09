@@ -6,7 +6,7 @@
  */
 package org.mule.compatibility.core.transport;
 
-import static org.mule.runtime.core.OptimizedRequestContext.unsafeSetEvent;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import static org.mule.runtime.core.api.config.MuleProperties.MULE_DISABLE_TRANSPORT_TRANSFORMER_PROPERTY;
 import static org.mule.runtime.core.api.config.MuleProperties.MULE_REMOTE_SYNC_PROPERTY;
 import static org.mule.runtime.core.util.SystemUtils.getDefaultEncoding;
@@ -17,7 +17,6 @@ import org.mule.runtime.api.execution.CompletionHandler;
 import org.mule.runtime.api.execution.ExceptionCallback;
 import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.NonBlockingVoidMuleEvent;
-import org.mule.runtime.core.RequestContext;
 import org.mule.runtime.core.VoidMuleEvent;
 import org.mule.runtime.core.api.MessagingException;
 import org.mule.runtime.core.api.MuleEvent;
@@ -98,7 +97,7 @@ public abstract class AbstractMessageDispatcher extends AbstractTransportMessage
                     // Update RequestContext ThreadLocal for backwards compatibility. Clear event as we are done with
                     // this
                     // thread.
-                    RequestContext.clear();
+                    setCurrentEvent(null);
                     return NonBlockingVoidMuleEvent.getInstance();
                 }
                 else
@@ -132,7 +131,7 @@ public abstract class AbstractMessageDispatcher extends AbstractTransportMessage
                     resultMessage, requestEvent.getMuleContext());
             requestEvent.getSession().merge(storedSession);
             MuleEvent resultEvent = new DefaultMuleEvent(resultMessage, requestEvent);
-            unsafeSetEvent(resultEvent);
+            setCurrentEvent(resultEvent);
             return resultEvent;
         }
         else
@@ -268,7 +267,7 @@ public abstract class AbstractMessageDispatcher extends AbstractTransportMessage
                         {
                             MuleEvent responseEvent = createResponseEvent(result, event);
                             // Set RequestContext ThreadLocal in new thread for backwards compatibility
-                            unsafeSetEvent(responseEvent);
+                            setCurrentEvent(responseEvent);
                             event.getReplyToHandler().processReplyTo(responseEvent, null, null);
                         }
                         catch (MessagingException messagingException)
@@ -306,7 +305,7 @@ public abstract class AbstractMessageDispatcher extends AbstractTransportMessage
                     public void run()
                     {
                         // Set RequestContext ThreadLocal in new thread for backwards compatibility
-                        unsafeSetEvent(event);
+                        setCurrentEvent(event);
                         event.getReplyToHandler().processExceptionReplyTo(new MessagingException(event, exception), null);
                     }
 

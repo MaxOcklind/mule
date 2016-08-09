@@ -8,9 +8,9 @@ package org.mule.runtime.core.routing;
 
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 
 import org.mule.runtime.core.DefaultMuleEvent;
-import org.mule.runtime.core.OptimizedRequestContext;
 import org.mule.runtime.core.VoidMuleEvent;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.MuleMessage;
@@ -120,7 +120,8 @@ public class DefaultRouterResultsHandler implements RouterResultsHandler
                                             .collectionPayload(singletonList(event.getMessage()), MuleMessage.class)
                                             .build();
         event.setMessage(coll);
-        return OptimizedRequestContext.unsafeSetEvent(event);
+        setCurrentEvent(event);
+        return event;
     }
 
     private MuleEvent createMessageCollection(final List<MuleEvent> nonNullResults,
@@ -140,6 +141,7 @@ public class DefaultRouterResultsHandler implements RouterResultsHandler
         {
             resultEvent.setFlowVariable(name, previous.getFlowVariable(name), previous.getFlowVariableDataType(name));
         }
-        return OptimizedRequestContext.unsafeSetEvent(resultEvent);
+        setCurrentEvent(resultEvent);
+        return resultEvent;
     }
 }

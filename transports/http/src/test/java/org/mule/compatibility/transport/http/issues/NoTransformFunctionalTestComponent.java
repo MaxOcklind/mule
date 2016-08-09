@@ -6,9 +6,11 @@
  */
 package org.mule.compatibility.transport.http.issues;
 
+import static org.mule.runtime.core.DefaultMuleEvent.getCurrentEvent;
 import org.mule.functional.functional.EventCallback;
 import org.mule.functional.functional.FunctionalTestNotification;
-import org.mule.runtime.core.RequestContext;
+import org.mule.runtime.core.DefaultMuleEvent;
+import org.mule.runtime.core.DefaultMuleEventContext;
 import org.mule.runtime.core.api.DefaultMuleException;
 import org.mule.runtime.core.api.MuleEventContext;
 import org.mule.runtime.core.api.lifecycle.Callable;
@@ -104,7 +106,7 @@ public class NoTransformFunctionalTestComponent implements Callable
     @Deprecated
     public Object onReceive(Object data) throws Exception
     {
-        MuleEventContext context = RequestContext.getEventContext();
+        MuleEventContext context = new DefaultMuleEventContext(getCurrentEvent());
 
         String contents = data.toString();
         String msg = StringMessageUtils.getBoilerPlate("Message Received in service: "

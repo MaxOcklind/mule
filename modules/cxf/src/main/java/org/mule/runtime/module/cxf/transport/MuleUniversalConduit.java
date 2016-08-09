@@ -8,11 +8,11 @@ package org.mule.runtime.module.cxf.transport;
 
 import static org.apache.cxf.message.Message.DECOUPLED_CHANNEL_MESSAGE;
 import static org.mule.runtime.api.metadata.MediaType.XML;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import org.mule.runtime.api.metadata.DataType;
 import org.mule.runtime.api.metadata.MediaType;
 import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.NonBlockingVoidMuleEvent;
-import org.mule.runtime.core.OptimizedRequestContext;
 import org.mule.runtime.core.VoidMuleEvent;
 import org.mule.runtime.core.api.DefaultMuleException;
 import org.mule.runtime.core.api.MessagingException;
@@ -250,7 +250,7 @@ public class MuleUniversalConduit extends AbstractConduit
                 });
             }
             // Update RequestContext ThreadLocal for backwards compatibility
-            OptimizedRequestContext.unsafeSetEvent(reqEvent);
+            setCurrentEvent(reqEvent);
 
             MuleEvent resEvent = processNext(reqEvent, m.getExchange());
 

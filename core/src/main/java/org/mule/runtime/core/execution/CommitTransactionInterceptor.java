@@ -6,7 +6,8 @@
  */
 package org.mule.runtime.core.execution;
 
-import org.mule.runtime.core.RequestContext;
+import static org.mule.runtime.core.DefaultMuleEvent.getCurrentEvent;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.VoidMuleEvent;
 import org.mule.runtime.core.api.MessagingException;
 import org.mule.runtime.core.api.MuleEvent;
@@ -47,7 +48,7 @@ class CommitTransactionInterceptor implements ExecutionInterceptor<MuleEvent>
                 //see https://www.mulesoft.org/jira/browse/MULE-8670
                 if (result == null || VoidMuleEvent.getInstance().equals(result))
                 {
-                    result = RequestContext.getEvent();
+                    result = getCurrentEvent();
                 }
                 throw new MessagingException(result, e);
             }

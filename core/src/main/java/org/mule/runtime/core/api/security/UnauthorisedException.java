@@ -6,7 +6,8 @@
  */
 package org.mule.runtime.core.api.security;
 
-import org.mule.runtime.core.RequestContext;
+import static org.mule.runtime.core.DefaultMuleEvent.getCurrentEvent;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.config.i18n.CoreMessages;
 import org.mule.runtime.core.config.i18n.Message;
@@ -26,12 +27,12 @@ public class UnauthorisedException extends SecurityException
 
     public UnauthorisedException(Message message)
     {
-        super(message, RequestContext.getEvent());
+        super(message, getCurrentEvent());
     }
 
     public UnauthorisedException(Message message, Throwable cause)
     {
-        super(message, RequestContext.getEvent(), cause);
+        super(message, getCurrentEvent(), cause);
     }
 
     public UnauthorisedException(Message message, MuleEvent event)

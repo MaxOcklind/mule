@@ -14,6 +14,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.junit.Assert.assertThat;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import static org.mule.runtime.core.message.DefaultMultiPartPayload.BODY_ATTRIBUTES;
 import static org.mule.runtime.core.util.IOUtils.getResourceAsUrl;
 import static org.mule.runtime.core.util.IOUtils.toMuleMessagePart;
@@ -21,7 +22,6 @@ import static org.mule.runtime.core.util.IOUtils.toMuleMessagePart;
 import org.mule.runtime.api.message.MultiPartPayload;
 import org.mule.runtime.api.metadata.MediaType;
 import org.mule.runtime.core.DefaultMuleEvent;
-import org.mule.runtime.core.RequestContext;
 import org.mule.runtime.core.api.MuleMessage;
 import org.mule.runtime.core.api.transformer.TransformerException;
 import org.mule.tck.junit4.AbstractMuleContextTestCase;
@@ -147,7 +147,7 @@ public class DefaultMultiPartPayloadTestCase extends AbstractMuleContextTestCase
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
-        RequestContext.setEvent(new DefaultMuleEvent(message, getTestFlow()));
+        setCurrentEvent(new DefaultMuleEvent(message, getTestFlow()));
         oos.writeObject(message);
         oos.flush();
         ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
@@ -170,7 +170,7 @@ public class DefaultMultiPartPayloadTestCase extends AbstractMuleContextTestCase
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
-        RequestContext.setEvent(new DefaultMuleEvent(message, getTestFlow()));
+        setCurrentEvent(new DefaultMuleEvent(message, getTestFlow()));
         oos.writeObject(message);
         oos.flush();
         ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));

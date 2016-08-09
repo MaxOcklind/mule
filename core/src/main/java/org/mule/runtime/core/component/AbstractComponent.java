@@ -7,12 +7,12 @@
 package org.mule.runtime.core.component;
 
 import static java.util.Collections.singletonList;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import static org.mule.runtime.core.util.SystemUtils.getDefaultEncoding;
 
 import org.mule.runtime.api.metadata.DataType;
 import org.mule.runtime.core.AbstractAnnotatedObject;
 import org.mule.runtime.core.DefaultMuleEvent;
-import org.mule.runtime.core.OptimizedRequestContext;
 import org.mule.runtime.core.VoidResult;
 import org.mule.runtime.core.api.MuleContext;
 import org.mule.runtime.core.api.MuleEvent;
@@ -91,7 +91,7 @@ public abstract class AbstractComponent extends AbstractAnnotatedObject implemen
     private MuleEvent invokeInternal(MuleEvent event) throws MuleException
     {
         // Ensure we have event in ThreadLocal
-        OptimizedRequestContext.unsafeSetEvent(event);
+        setCurrentEvent(event);
 
         if (logger.isTraceEnabled())
         {

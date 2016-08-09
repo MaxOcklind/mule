@@ -6,10 +6,10 @@
  */
 package org.mule.runtime.core.routing.requestreply;
 
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import static org.mule.runtime.core.message.Correlation.NOT_SET;
 
 import org.mule.runtime.core.DefaultMuleEvent;
-import org.mule.runtime.core.OptimizedRequestContext;
 import org.mule.runtime.core.api.DefaultMuleException;
 import org.mule.runtime.core.api.MessagingException;
 import org.mule.runtime.core.api.MuleEvent;
@@ -97,8 +97,8 @@ public abstract class AbstractAsyncRequestReplyRequester extends AbstractInterce
                 {
                     event.getSession().merge(resultEvent.getSession());
                 }
-                resultEvent = org.mule.runtime.core.RequestContext.setEvent(new DefaultMuleEvent(resultEvent.getMessage(),
-                    event));
+                resultEvent = new DefaultMuleEvent(resultEvent.getMessage(), event);
+                setCurrentEvent(resultEvent);
             }
             return resultEvent;
         }
@@ -255,7 +255,8 @@ public abstract class AbstractAsyncRequestReplyRequester extends AbstractInterce
             // receiver thread (or the senders dispatcher thread in case of vm
             // with queueEvents="false") and the current thread may need to mutate
             // the even. See MULE-4370
-            return OptimizedRequestContext.criticalSetEvent(result);
+            setCurrentEvent(result);
+            return result;
         }
         else
         {

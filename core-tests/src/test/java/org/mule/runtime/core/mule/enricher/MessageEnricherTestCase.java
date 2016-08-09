@@ -21,12 +21,12 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mule.runtime.api.metadata.MediaType.JSON;
+import static org.mule.runtime.core.DefaultMuleEvent.getCurrentEvent;
 
 import org.mule.runtime.api.metadata.DataType;
 import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.MessageExchangePattern;
 import org.mule.runtime.core.NonBlockingVoidMuleEvent;
-import org.mule.runtime.core.RequestContext;
 import org.mule.runtime.core.api.MessagingException;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.MuleException;
@@ -147,7 +147,7 @@ public class MessageEnricherTestCase extends AbstractMuleContextTestCase
         {
             assertThat(e.getMessage(), is("Expected."));
         }
-        assertThat(RequestContext.getEvent().getReplyToHandler(), nullValue());
+        assertThat(getCurrentEvent().getReplyToHandler(), nullValue());
     }
 
     @Test
@@ -392,7 +392,7 @@ public class MessageEnricherTestCase extends AbstractMuleContextTestCase
         {
             assertThat(e.getMessage(), is("Expected."));
         }
-        assertThat(RequestContext.getEvent().getReplyToHandler(), instanceOf(ReplyToHandler.class));
+        assertThat(getCurrentEvent().getReplyToHandler(), instanceOf(ReplyToHandler.class));
     }
 
     private MuleEvent createNonBlockingEvent(SensingNullReplyToHandler nullReplyToHandler)

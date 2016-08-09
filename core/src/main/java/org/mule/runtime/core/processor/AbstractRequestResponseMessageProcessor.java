@@ -6,9 +6,9 @@
  */
 package org.mule.runtime.core.processor;
 
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.NonBlockingVoidMuleEvent;
-import org.mule.runtime.core.OptimizedRequestContext;
 import org.mule.runtime.core.api.MessagingException;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.MuleException;
@@ -74,7 +74,7 @@ public abstract class AbstractRequestResponseMessageProcessor extends AbstractIn
         MessagingException exception = null;
         MuleEvent eventToProcess = new DefaultMuleEvent(request, createReplyToHandler(request));
         // Update RequestContext ThreadLocal for backwards compatibility
-        eventToProcess = OptimizedRequestContext.unsafeSetEvent(eventToProcess);
+        setCurrentEvent(eventToProcess);
 
         try
         {
@@ -151,7 +151,7 @@ public abstract class AbstractRequestResponseMessageProcessor extends AbstractIn
         {
             event = new DefaultMuleEvent(event, originalReplyToHandler);
             // Update RequestContext ThreadLocal for backwards compatibility
-            OptimizedRequestContext.unsafeSetEvent(event);
+            setCurrentEvent(event);
         }
         return event;
     }

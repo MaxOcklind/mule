@@ -7,7 +7,8 @@
 package org.mule.tck.junit4;
 
 import static org.junit.Assume.assumeThat;
-import org.mule.runtime.core.RequestContext;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.util.MuleUrlStreamHandlerFactory;
 import org.mule.runtime.core.util.StringMessageUtils;
 import org.mule.runtime.core.util.StringUtils;
@@ -237,7 +238,7 @@ public abstract class AbstractMuleTestCase
     @After
     public final void clearRequestContext()
     {
-        RequestContext.clear();
+        setCurrentEvent(null);
     }
 
     private static List<String> collectThreadNames()

@@ -6,7 +6,8 @@
  */
 package org.mule.runtime.module.pgp;
 
-import org.mule.runtime.core.RequestContext;
+import static org.mule.runtime.core.DefaultMuleEvent.getCurrentEvent;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.lifecycle.InitialisationException;
 import org.mule.runtime.core.api.security.CredentialsAccessor;
@@ -80,7 +81,7 @@ public class KeyBasedEncryptionStrategy extends AbstractNamedEncryptionStrategy
     {
         if (cryptInfo == null)
         {
-            MuleEvent event = RequestContext.getEvent();
+            MuleEvent event = getCurrentEvent();
             PGPPublicKey publicKey = keyManager.getPublicKey((String) this.getCredentialsAccessor().getCredentials(event));
             this.checkKeyExpirity(publicKey);
             return new PGPCryptInfo(publicKey, false);

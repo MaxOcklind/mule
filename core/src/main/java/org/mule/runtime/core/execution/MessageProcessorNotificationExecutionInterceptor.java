@@ -6,9 +6,9 @@
  */
 package org.mule.runtime.core.execution;
 
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.NonBlockingVoidMuleEvent;
-import org.mule.runtime.core.OptimizedRequestContext;
 import org.mule.runtime.core.api.MessagingException;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.MuleException;
@@ -96,7 +96,7 @@ class MessageProcessorNotificationExecutionInterceptor implements MessageProcess
         }
         // Update RequestContext ThreadLocal in case if previous processor modified it
         // also for backwards compatibility
-        OptimizedRequestContext.unsafeSetEvent(eventToProcess);
+        setCurrentEvent(eventToProcess);
 
         try
         {

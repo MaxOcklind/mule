@@ -6,7 +6,9 @@
  */
 package org.mule.functional.functional;
 
-import org.mule.runtime.core.RequestContext;
+import static org.mule.runtime.core.DefaultMuleEvent.getCurrentEvent;
+import org.mule.runtime.core.DefaultMuleEvent;
+import org.mule.runtime.core.DefaultMuleEventContext;
 import org.mule.runtime.core.api.MuleEventContext;
 import org.mule.runtime.core.api.transformer.TransformerException;
 import org.mule.runtime.core.context.notification.CustomNotification;
@@ -50,7 +52,7 @@ public class FunctionalTestNotification extends CustomNotification
     {
         super(message, action);
         this.replyMessage = null;
-        this.eventContext = RequestContext.getEventContext();
+        this.eventContext = new DefaultMuleEventContext(getCurrentEvent());
         resourceIdentifier = eventContext.getFlowConstruct().getName();
 
     }

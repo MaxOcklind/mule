@@ -6,8 +6,10 @@
  */
 package org.mule.functional.functional;
 
+import static org.mule.runtime.core.DefaultMuleEvent.getCurrentEvent;
 import org.mule.functional.exceptions.FunctionalTestException;
-import org.mule.runtime.core.RequestContext;
+import org.mule.runtime.core.DefaultMuleEvent;
+import org.mule.runtime.core.DefaultMuleEventContext;
 import org.mule.runtime.core.api.MuleContext;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.MuleEventContext;
@@ -165,7 +167,7 @@ public class FunctionalTestComponent implements Callable, Initialisable, Disposa
     @Override
     public Object onReceive(Object data) throws Exception
     {
-        MuleEventContext context = RequestContext.getEventContext();
+        MuleEventContext context = new DefaultMuleEventContext(getCurrentEvent());
 
         if (isThrowException())
         {

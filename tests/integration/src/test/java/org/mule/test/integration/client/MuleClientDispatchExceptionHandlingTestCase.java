@@ -9,8 +9,9 @@ package org.mule.test.integration.client;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
+import static org.mule.runtime.core.DefaultMuleEvent.getCurrentEvent;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.test.AbstractIntegrationTestCase;
-import org.mule.runtime.core.RequestContext;
 import org.mule.runtime.core.api.DefaultMuleException;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.MuleEventContext;
@@ -123,12 +124,12 @@ public class MuleClientDispatchExceptionHandlingTestCase extends AbstractIntegra
         @Override
         public Object onCall(MuleEventContext eventContext) throws Exception
         {
-            // Validates that if another Component access to the RequestContext.getEvent() the one returned
+            // Validates that if another Component access to the getCurrentEvent() the one returned
             // is the correct, in this case it should be the same that it was set before doing the
             // eventContext.dispatchEvent() on main-flow java component where the exception happened right after
-            // that invocatioeventPropagated = RequestContext.getEvent().equals(eventFromMainFlow);
+            // that invocatioeventPropagated = getCurrentEvent().equals(eventFromMainFlow);
             // Checking if message is still the same on catch-exception-strategy
-            isSameMessage = RequestContext.getEvent().getMessage().equals(messageFromMainFlow);
+            isSameMessage = getCurrentEvent().getMessage().equals(messageFromMainFlow);
             return eventContext.getMessage();
         }
     }
@@ -138,12 +139,12 @@ public class MuleClientDispatchExceptionHandlingTestCase extends AbstractIntegra
         @Override
         public MuleEvent process(MuleEvent event) throws MuleException
         {
-            // Validates that if another Component access to the RequestContext.getEvent() the one returned
+            // Validates that if another Component access to the getCurrentEvent() the one returned
             // is the correct, in this case it should be the same that it was set before doing the
             // eventContext.dispatchEvent() on main-flow java component where the exception happened right after
-            // that invocatioeventPropagated = RequestContext.getEvent().equals(eventFromMainFlow);
+            // that invocatioeventPropagated = getCurrentEvent().equals(eventFromMainFlow);
             // Checking if message is still the same on catch-exception-strategy
-            isSameMessage = RequestContext.getEvent().getMessage().equals(messageFromMainFlow);
+            isSameMessage = getCurrentEvent().getMessage().equals(messageFromMainFlow);
             return event;
         }
     }
@@ -153,7 +154,7 @@ public class MuleClientDispatchExceptionHandlingTestCase extends AbstractIntegra
         @Override
         public Object onCall(MuleEventContext eventContext) throws Exception
         {
-            eventFromMainFlow = RequestContext.getEvent();
+            eventFromMainFlow = getCurrentEvent();
             messageFromMainFlow = eventFromMainFlow.getMessage();
 
             eventContext.getMuleContext().getClient().dispatch(getUrl("innertest"), MuleMessage.builder().payload("payload").build());
@@ -167,7 +168,7 @@ public class MuleClientDispatchExceptionHandlingTestCase extends AbstractIntegra
         @Override
         public Object onCall(MuleEventContext eventContext) throws Exception
         {
-            eventFromMainFlow = RequestContext.getEvent();
+            eventFromMainFlow = getCurrentEvent();
             messageFromMainFlow = eventFromMainFlow.getMessage();
 
             eventContext.sendEvent(MuleMessage.builder().payload("payload").build(),
@@ -182,7 +183,7 @@ public class MuleClientDispatchExceptionHandlingTestCase extends AbstractIntegra
         @Override
         public MuleEvent process(MuleEvent event) throws MuleException
         {
-            eventFromMainFlow = RequestContext.getEvent();
+            eventFromMainFlow = getCurrentEvent();
             messageFromMainFlow = eventFromMainFlow.getMessage();
 
             event.getMuleContext().getClient().dispatch(getUrl("innertest"),

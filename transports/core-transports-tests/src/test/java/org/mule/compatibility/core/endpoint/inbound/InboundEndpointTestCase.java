@@ -15,6 +15,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import org.mule.compatibility.core.DefaultMuleEventEndpointUtils;
 import org.mule.compatibility.core.api.endpoint.InboundEndpoint;
 import org.mule.compatibility.core.api.security.EndpointSecurityFilter;
@@ -26,7 +27,6 @@ import org.mule.compatibility.core.transformer.simple.InboundAppendTransformer;
 import org.mule.compatibility.core.transformer.simple.ResponseAppendTransformer;
 import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.MessageExchangePattern;
-import org.mule.runtime.core.RequestContext;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.MuleException;
 import org.mule.runtime.core.api.MuleMessage;
@@ -185,7 +185,7 @@ public class InboundEndpointTestCase extends AbstractMessageProcessorTestCase
         MessageProcessor mpChain = ((AbstractEndpoint) endpoint).getMessageProcessorChain(requestEvent.getFlowConstruct());
 
         // Required for UnauthorisedException creation
-        RequestContext.setEvent(requestEvent);
+        setCurrentEvent(requestEvent);
 
         try
         {
@@ -270,7 +270,7 @@ public class InboundEndpointTestCase extends AbstractMessageProcessorTestCase
         MessageProcessor mpChain = ((AbstractEndpoint) endpoint).getMessageProcessorChain(requestEvent.getFlowConstruct());
 
         // Required for UnauthorisedException creation
-        RequestContext.setEvent(requestEvent);
+        setCurrentEvent(requestEvent);
 
         try
         {

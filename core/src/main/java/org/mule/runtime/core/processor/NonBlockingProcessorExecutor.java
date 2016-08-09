@@ -6,11 +6,11 @@
  */
 package org.mule.runtime.core.processor;
 
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import org.mule.runtime.core.api.connector.NonBlockingReplyToHandler;
 import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.MessageExchangePattern;
 import org.mule.runtime.core.NonBlockingVoidMuleEvent;
-import org.mule.runtime.core.OptimizedRequestContext;
 import org.mule.runtime.core.api.MessagingException;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.MuleException;
@@ -65,7 +65,7 @@ public class NonBlockingProcessorExecutor extends BlockingProcessorExecutor
                 // Make event synchronous so that non-blocking is not used
                 event = new DefaultMuleEvent(event, event.getFlowConstruct(), event.getReplyToHandler(), event.getReplyToDestination(), true);
                 // Update RequestContext ThreadLocal for backwards compatibility
-                OptimizedRequestContext.unsafeSetEvent(event);
+                setCurrentEvent(event);
             }
 
             if (processor instanceof NonBlockingMessageProcessor)
@@ -76,7 +76,7 @@ public class NonBlockingProcessorExecutor extends BlockingProcessorExecutor
                 {
                     event = new DefaultMuleEvent(event, new NonBlockingProcessorExecutorReplyToHandler());
                     // Update RequestContext ThreadLocal for backwards compatibility
-                    OptimizedRequestContext.unsafeSetEvent(event);
+                    setCurrentEvent(event);
                 }
             }
         }
@@ -115,7 +115,7 @@ public class NonBlockingProcessorExecutor extends BlockingProcessorExecutor
         {
             event = new DefaultMuleEvent(event, replyToHandler);
             // Update RequestContext ThreadLocal for backwards compatibility
-            OptimizedRequestContext.unsafeSetEvent(event);
+            setCurrentEvent(event);
         }
         return event;
     }

@@ -7,11 +7,13 @@
 package org.mule.tck;
 
 import static org.mockito.Mockito.spy;
+import static org.mule.runtime.core.DefaultMuleEvent.getCurrentEvent;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 
 import org.mule.runtime.core.DefaultMuleContext;
 import org.mule.runtime.core.DefaultMuleEvent;
+import org.mule.runtime.core.DefaultMuleEventContext;
 import org.mule.runtime.core.MessageExchangePattern;
-import org.mule.runtime.core.RequestContext;
 import org.mule.runtime.core.api.Injector;
 import org.mule.runtime.core.api.MuleContext;
 import org.mule.runtime.core.api.MuleEvent;
@@ -202,12 +204,12 @@ public final class MuleTestUtils
         try
         {
             final MuleEvent event = getTestEvent(data, mep, context);
-            RequestContext.setEvent(event);
-            return RequestContext.getEventContext();
+            setCurrentEvent(event);
+            return new DefaultMuleEventContext(event);
         }
         finally
         {
-            RequestContext.setEvent(null);
+            setCurrentEvent(null);
         }
     }
 

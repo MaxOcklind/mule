@@ -17,6 +17,7 @@ import org.mule.runtime.api.metadata.DataType;
 import org.mule.runtime.core.api.DefaultMuleException;
 import org.mule.runtime.core.api.MuleContext;
 import org.mule.runtime.core.api.MuleEvent;
+import org.mule.runtime.core.api.MuleEventContext;
 import org.mule.runtime.core.api.MuleException;
 import org.mule.runtime.core.api.MuleMessage;
 import org.mule.runtime.core.api.MuleSession;
@@ -70,6 +71,7 @@ public class DefaultMuleEvent implements MuleEvent, DeserializationPostInitialis
 {
     private static final long serialVersionUID = 1L;
 
+    private static final ThreadLocal<MuleEvent> currentEvent = new ThreadLocal<>();
     private static Logger logger = LoggerFactory.getLogger(DefaultMuleEvent.class);
 
     /** Immutable MuleEvent state **/
@@ -1115,4 +1117,25 @@ public class DefaultMuleEvent implements MuleEvent, DeserializationPostInitialis
     {
         session.setSecurityContext(context);
     }
+
+    /**
+     * Return the event associated with the currently executing thread.
+     *
+     * @return event for currently executing thread.
+     */
+    public static MuleEvent getCurrentEvent()
+    {
+        return currentEvent.get();
+    }
+
+    /**
+     * Set the event to be associated with the currently executing thread.
+     *
+     * @param event event for currently executing thread.
+     */
+    public static void setCurrentEvent(MuleEvent event)
+    {
+        currentEvent.set(event);
+    }
+
 }

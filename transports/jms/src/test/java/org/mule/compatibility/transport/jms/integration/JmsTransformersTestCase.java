@@ -8,11 +8,12 @@ package org.mule.compatibility.transport.jms.integration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 
 import org.mule.compatibility.transport.jms.transformers.AbstractJmsTransformer;
 import org.mule.compatibility.transport.jms.transformers.JMSMessageToObject;
 import org.mule.runtime.api.metadata.DataType;
-import org.mule.runtime.core.RequestContext;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.util.FileUtils;
 import org.mule.runtime.core.util.compression.CompressionStrategy;
 import org.mule.runtime.core.util.compression.GZipCompression;
@@ -60,7 +61,7 @@ public class JmsTransformersTestCase extends AbstractJmsFunctionalTestCase
     @Override
     protected void doTearDown() throws Exception
     {
-        RequestContext.setEvent(null);
+        setCurrentEvent(null);
         if (session != null)
         {
             session.close();
@@ -71,7 +72,7 @@ public class JmsTransformersTestCase extends AbstractJmsFunctionalTestCase
     @Test
     public void testTransformObjectMessage() throws Exception
     {
-        RequestContext.setEvent(getTestEvent("test"));
+        setCurrentEvent(getTestEvent("test"));
 
         ObjectMessage oMsg = session.createObjectMessage();
         File f = FileUtils.newFile("/some/random/path");
@@ -90,7 +91,7 @@ public class JmsTransformersTestCase extends AbstractJmsFunctionalTestCase
     @Test
     public void testTransformTextMessage() throws Exception
     {
-        RequestContext.setEvent(getTestEvent("test"));
+        setCurrentEvent(getTestEvent("test"));
 
         String text = "This is a test TextMessage";
         TextMessage tMsg = session.createTextMessage();
@@ -110,7 +111,7 @@ public class JmsTransformersTestCase extends AbstractJmsFunctionalTestCase
     @Test
     public void testTransformMapMessage() throws Exception
     {
-        RequestContext.setEvent(getTestEvent("test"));
+        setCurrentEvent(getTestEvent("test"));
 
         Map p = new HashMap();
         p.put("Key1", "Value1");
@@ -138,7 +139,7 @@ public class JmsTransformersTestCase extends AbstractJmsFunctionalTestCase
     @Test
     public void testTransformMapToObjectMessage() throws Exception
     {
-        RequestContext.setEvent(getTestEvent("test"));
+        setCurrentEvent(getTestEvent("test"));
 
         Map p = new HashMap();
         p.put("Key1", "Value1");
@@ -168,7 +169,7 @@ public class JmsTransformersTestCase extends AbstractJmsFunctionalTestCase
     @Test
     public void testTransformByteMessage() throws Exception
     {
-        RequestContext.setEvent(getTestEvent("test"));
+        setCurrentEvent(getTestEvent("test"));
 
         AbstractJmsTransformer trans = new SessionEnabledObjectToJMSMessage(session);
         trans.setReturnDataType(DataType.fromType(BytesMessage.class));
@@ -189,7 +190,7 @@ public class JmsTransformersTestCase extends AbstractJmsFunctionalTestCase
     @Test
     public void testTransformStreamMessage() throws Exception
     {
-        RequestContext.setEvent(getTestEvent("test"));
+        setCurrentEvent(getTestEvent("test"));
 
         String text = "Test Text";
         int i = 97823;
@@ -229,7 +230,7 @@ public class JmsTransformersTestCase extends AbstractJmsFunctionalTestCase
     @Test
     public void testCompressedBytesMessage() throws Exception
     {
-        RequestContext.setEvent(getTestEvent("test"));
+        setCurrentEvent(getTestEvent("test"));
 
         // use GZIP
         CompressionStrategy compressor = new GZipCompression();

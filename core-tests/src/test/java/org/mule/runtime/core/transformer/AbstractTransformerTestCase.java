@@ -9,9 +9,10 @@ package org.mule.runtime.core.transformer;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.fail;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 
 import org.mule.runtime.api.metadata.DataType;
-import org.mule.runtime.core.RequestContext;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.api.MuleMessage;
 import org.mule.runtime.core.api.transformer.Transformer;
 import org.mule.runtime.core.api.transformer.TransformerException;
@@ -31,13 +32,13 @@ public abstract class AbstractTransformerTestCase extends AbstractMuleContextTes
     protected void doSetUp() throws Exception
     {
         // setup a dummy context for transformers that are event aware
-        RequestContext.setEvent(getTestEvent("test"));
+        setCurrentEvent(getTestEvent("test"));
     }
 
     @Override
     protected void doTearDown() throws Exception
     {
-        RequestContext.setEvent(null);
+        setCurrentEvent(null);
     }
 
     // Remove tabs and line breaks in the passed String; this makes comparison of XML

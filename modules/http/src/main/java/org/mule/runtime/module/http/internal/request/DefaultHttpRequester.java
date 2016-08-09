@@ -7,13 +7,13 @@
 package org.mule.runtime.module.http.internal.request;
 
 import static java.lang.Integer.MAX_VALUE;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import static org.mule.runtime.core.api.debug.FieldDebugInfoFactory.createFieldDebugInfo;
 import static org.mule.runtime.core.context.notification.ConnectorMessageNotification.MESSAGE_REQUEST_BEGIN;
 import static org.mule.runtime.core.context.notification.ConnectorMessageNotification.MESSAGE_REQUEST_END;
 import org.mule.runtime.api.execution.BlockingCompletionHandler;
 import org.mule.runtime.api.execution.CompletionHandler;
-import org.mule.runtime.core.OptimizedRequestContext;
-import org.mule.runtime.core.RequestContext;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.api.MessagingException;
 import org.mule.runtime.core.api.MuleContext;
 import org.mule.runtime.core.api.MuleEvent;
@@ -277,14 +277,14 @@ public class DefaultHttpRequester extends AbstractNonBlockingMessageProcessor im
                                      }
                                      finally
                                      {
-                                         RequestContext.clear();
+                                         setCurrentEvent(null);
                                      }
                                  }
 
                                  private MuleEvent resetMuleEventForNewThread(MuleEvent event)
                                  {
                                      // Set RequestContext ThreadLocal in new thread for backwards compatibility
-                                     OptimizedRequestContext.unsafeSetEvent(event);
+                                     setCurrentEvent(event);
                                      return event;
                                  }
                              }, getWorkManager(muleEvent));

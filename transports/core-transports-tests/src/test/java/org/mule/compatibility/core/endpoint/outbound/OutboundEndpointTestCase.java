@@ -23,6 +23,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import static org.mule.runtime.core.MessageExchangePattern.REQUEST_RESPONSE;
 import static org.mule.runtime.core.api.config.MuleProperties.MULE_EVENT_TIMEOUT_PROPERTY;
 import org.mule.compatibility.core.api.endpoint.OutboundEndpoint;
@@ -35,9 +36,9 @@ import org.mule.compatibility.core.transformer.simple.OutboundAppendTransformer;
 import org.mule.compatibility.core.transformer.simple.ResponseAppendTransformer;
 import org.mule.compatibility.core.transport.AbstractMessageDispatcher;
 import org.mule.runtime.api.execution.CompletionHandler;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.MessageExchangePattern;
 import org.mule.runtime.core.NonBlockingVoidMuleEvent;
-import org.mule.runtime.core.RequestContext;
 import org.mule.runtime.core.VoidMuleEvent;
 import org.mule.runtime.core.api.MessagingException;
 import org.mule.runtime.core.api.MuleEvent;
@@ -203,7 +204,7 @@ public class OutboundEndpointTestCase extends AbstractMessageProcessorTestCase
                 null, null, REQUEST_RESPONSE, null);
 
         testOutboundEvent = createTestOutboundEvent();
-        RequestContext.setEvent(testOutboundEvent);
+        setCurrentEvent(testOutboundEvent);
         try
         {
             endpoint.process(testOutboundEvent);

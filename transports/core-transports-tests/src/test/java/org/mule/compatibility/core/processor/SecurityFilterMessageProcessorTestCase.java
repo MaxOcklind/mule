@@ -11,10 +11,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 
 import org.mule.compatibility.core.api.endpoint.InboundEndpoint;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.MessageExchangePattern;
-import org.mule.runtime.core.RequestContext;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.processor.InterceptingMessageProcessor;
 import org.mule.runtime.core.processor.SecurityFilterMessageProcessor;
@@ -55,7 +56,7 @@ public class SecurityFilterMessageProcessorTestCase extends AbstractMessageProce
         MuleEvent inEvent = createTestInboundEvent(endpoint);
 
         // Need event in RequestContext :-(
-        RequestContext.setEvent(inEvent);
+        setCurrentEvent(inEvent);
 
         try
         {

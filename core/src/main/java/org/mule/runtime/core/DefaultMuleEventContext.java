@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
  * request. Using the context, developers can send/dispatch/receive events
  * programmatically as well as manage transactions.
  */
+@Deprecated
 public class DefaultMuleEventContext implements MuleEventContext
 {
     /**

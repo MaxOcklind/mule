@@ -13,8 +13,8 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import org.mule.runtime.core.DefaultMuleEvent;
-import org.mule.runtime.core.RequestContext;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.MuleMessage;
 import org.mule.runtime.core.api.expression.ExpressionRuntimeException;
@@ -182,14 +182,14 @@ public class XPath3FunctionTestCase extends AbstractELTestCase
     private Object doEvaluate(String expression, MuleEvent event) throws Exception
     {
 
-        RequestContext.setEvent(event);
+        setCurrentEvent(event);
         try
         {
             return evaluate(expression, event);
         }
         finally
         {
-            RequestContext.clear();
+            setCurrentEvent(null);
         }
     }
 }

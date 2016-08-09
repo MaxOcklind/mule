@@ -6,8 +6,9 @@
  */
 package org.mule.runtime.core.transformer.simple;
 
+import static org.mule.runtime.core.DefaultMuleEvent.getCurrentEvent;
 import org.mule.runtime.api.metadata.DataType;
-import org.mule.runtime.core.RequestContext;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.api.transformer.DiscoverableTransformer;
 import org.mule.runtime.core.api.transformer.TransformerException;
 import org.mule.runtime.core.config.i18n.CoreMessages;
@@ -97,7 +98,7 @@ public class ObjectToString extends AbstractTransformer implements DiscoverableT
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         try
         {
-            handler.write(RequestContext.getEvent(), bytes);
+            handler.write(getCurrentEvent(), bytes);
             return bytes.toString(outputEncoding.name());
         }
         catch (IOException e)

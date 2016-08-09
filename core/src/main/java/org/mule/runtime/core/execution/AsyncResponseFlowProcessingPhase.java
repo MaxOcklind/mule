@@ -6,12 +6,12 @@
  */
 package org.mule.runtime.core.execution;
 
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import static org.mule.runtime.core.context.notification.ConnectorMessageNotification.MESSAGE_ERROR_RESPONSE;
 import static org.mule.runtime.core.context.notification.ConnectorMessageNotification.MESSAGE_RECEIVED;
 import static org.mule.runtime.core.context.notification.ConnectorMessageNotification.MESSAGE_RESPONSE;
 import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.NonBlockingVoidMuleEvent;
-import org.mule.runtime.core.OptimizedRequestContext;
 import org.mule.runtime.core.api.MessagingException;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.MuleException;
@@ -76,7 +76,7 @@ public class AsyncResponseFlowProcessingPhase extends NotificationFiringProcessi
                                 muleEvent = new DefaultMuleEvent(muleEvent, new ExceptionHandlingReplyToHandlerDecorator(new FlowProcessingNonBlockingReplyToHandler(template, phaseResultNotifier, exceptionHandler),
                                                                                                                          messageProcessContext.getFlowConstruct().getExceptionListener()));
                                 // Update RequestContext ThreadLocal for backwards compatibility
-                                OptimizedRequestContext.unsafeSetEvent(muleEvent);
+                                setCurrentEvent(muleEvent);
                             }
                             return template.routeEvent(muleEvent);
                         });

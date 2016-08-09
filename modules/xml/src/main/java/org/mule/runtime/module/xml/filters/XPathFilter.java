@@ -6,9 +6,10 @@
  */
 package org.mule.runtime.module.xml.filters;
 
+import static org.mule.runtime.core.DefaultMuleEvent.getCurrentEvent;
 import static org.mule.runtime.core.util.ClassUtils.equal;
 import static org.mule.runtime.core.util.ClassUtils.hash;
-import org.mule.runtime.core.RequestContext;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.api.MuleContext;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.MuleMessage;
@@ -174,7 +175,7 @@ public class XPathFilter extends AbstractJaxpFilter  implements Filter, Initiali
 
         try
         {
-            xpathResult = xpathEvaluator.evaluate(pattern, node, RequestContext.getEvent());
+            xpathResult = xpathEvaluator.evaluate(pattern, node, getCurrentEvent());
         }
         catch (Exception e)
         {

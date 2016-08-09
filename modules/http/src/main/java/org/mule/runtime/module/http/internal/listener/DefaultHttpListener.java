@@ -6,11 +6,11 @@
  */
 package org.mule.runtime.module.http.internal.listener;
 
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import static org.mule.runtime.module.http.api.HttpConstants.HttpStatus.BAD_REQUEST;
 import static org.mule.runtime.module.http.api.HttpConstants.HttpStatus.INTERNAL_SERVER_ERROR;
 
-import org.mule.runtime.core.OptimizedRequestContext;
-import org.mule.runtime.core.RequestContext;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.api.MuleContext;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.MuleException;
@@ -144,7 +144,7 @@ public class DefaultHttpListener implements HttpListener, Initialisable, MuleCon
                 }
                 finally
                 {
-                    RequestContext.clear();
+                    setCurrentEvent(null);
                 }
             }
 
@@ -179,7 +179,7 @@ public class DefaultHttpListener implements HttpListener, Initialisable, MuleCon
     {
         MuleEvent muleEvent = HttpRequestToMuleEvent.transform(requestContext, muleContext, flowConstruct, parseRequest, listenerPath);
         // Update RequestContext ThreadLocal for backwards compatibility
-        OptimizedRequestContext.unsafeSetEvent(muleEvent);
+        setCurrentEvent(muleEvent);
         return muleEvent;
     }
 

@@ -6,8 +6,9 @@
  */
 package org.mule.runtime.core.work;
 
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import static org.mule.runtime.core.util.ClassUtils.withContextClassLoader;
-import org.mule.runtime.core.RequestContext;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.transaction.TransactionCoordination;
 import org.mule.runtime.core.util.concurrent.Latch;
 
@@ -291,7 +292,7 @@ public class WorkerContext implements Work
         }
         finally
         {
-            RequestContext.clear();
+            setCurrentEvent(null);
             TransactionCoordination.getInstance().clear();
             endLatch.countDown();
         }

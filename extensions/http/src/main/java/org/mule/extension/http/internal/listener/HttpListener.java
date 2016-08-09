@@ -7,6 +7,7 @@
 package org.mule.extension.http.internal.listener;
 
 import static org.mule.extension.http.internal.HttpConnector.OTHER_SETTINGS;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import static org.mule.runtime.core.api.lifecycle.LifecycleUtils.initialiseIfNeeded;
 import static org.mule.runtime.extension.api.annotation.param.display.Placement.ADVANCED;
 import static org.mule.runtime.module.http.api.HttpConstants.HttpStatus.BAD_REQUEST;
@@ -21,7 +22,7 @@ import org.mule.extension.http.internal.request.validator.HttpMetadataResolver;
 import org.mule.runtime.api.execution.CompletionHandler;
 import org.mule.runtime.api.execution.ExceptionCallback;
 import org.mule.runtime.api.message.MuleMessage;
-import org.mule.runtime.core.RequestContext;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.api.MessagingException;
 import org.mule.runtime.core.api.MuleContext;
 import org.mule.runtime.core.api.MuleEvent;
@@ -270,7 +271,7 @@ public class HttpListener extends Source<Object, HttpRequestAttributes> implemen
                 }
                 finally
                 {
-                    RequestContext.clear();
+                    setCurrentEvent(null);
                 }
             }
 
@@ -306,7 +307,7 @@ public class HttpListener extends Source<Object, HttpRequestAttributes> implemen
         return HttpRequestToMuleMessage.transform(requestContext, muleContext, parseRequest, listenerPath);
         //TODO: MULE-9748 Analyse RequestContext use in HTTP extension
         // Update RequestContext ThreadLocal for backwards compatibility
-        //OptimizedRequestContext.unsafeSetEvent(muleEvent);
+        //setCurrentEvent(muleEvent);
         //return muleEvent;
     }
 

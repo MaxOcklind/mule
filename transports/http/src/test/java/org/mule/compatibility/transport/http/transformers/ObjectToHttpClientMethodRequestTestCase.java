@@ -21,12 +21,13 @@ import static org.mule.compatibility.transport.http.HttpConstants.HTTP10;
 import static org.mule.compatibility.transport.http.HttpConstants.METHOD_GET;
 import static org.mule.compatibility.transport.http.HttpConstants.METHOD_POST;
 import static org.mule.compatibility.transport.http.HttpConstants.METHOD_PUT;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 import static org.mule.runtime.core.api.config.MuleProperties.MULE_ENDPOINT_PROPERTY;
 import org.mule.compatibility.core.api.endpoint.InboundEndpoint;
 import org.mule.compatibility.transport.http.HttpRequest;
 import org.mule.compatibility.transport.http.RequestLine;
 import org.mule.runtime.api.metadata.MediaType;
-import org.mule.runtime.core.RequestContext;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.MuleMessage;
 import org.mule.tck.junit4.AbstractMuleContextEndpointTestCase;
@@ -58,7 +59,7 @@ public class ObjectToHttpClientMethodRequestTestCase extends AbstractMuleContext
                 .addOutboundProperty(HTTP_METHOD_PROPERTY, method)
                 .addOutboundProperty(MULE_ENDPOINT_PROPERTY, url)
                 .build();
-        RequestContext.setEvent(event);
+        setCurrentEvent(event);
 
         return message;
     }
@@ -76,7 +77,7 @@ public class ObjectToHttpClientMethodRequestTestCase extends AbstractMuleContext
                 .addOutboundProperty(HTTP_METHOD_PROPERTY, method)
                 .addOutboundProperty(MULE_ENDPOINT_PROPERTY, url)
                 .build();
-        RequestContext.setEvent(event);
+        setCurrentEvent(event);
         
         return message;
     }    
@@ -93,7 +94,7 @@ public class ObjectToHttpClientMethodRequestTestCase extends AbstractMuleContext
     @Override
     protected void doTearDown() throws Exception
     {
-        RequestContext.setEvent(null);
+        setCurrentEvent(null);
     }
 
     @Test

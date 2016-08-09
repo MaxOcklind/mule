@@ -6,8 +6,9 @@
  */
 package org.mule.runtime.module.xml.util;
 
+import static org.mule.runtime.core.DefaultMuleEvent.getCurrentEvent;
 import org.mule.runtime.api.metadata.DataType;
-import org.mule.runtime.core.RequestContext;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.api.MuleContext;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.message.OutputHandler;
@@ -278,7 +279,7 @@ public class XMLUtils extends org.mule.runtime.core.util.XMLUtils
     @Deprecated
     public static javax.xml.stream.XMLStreamReader toXMLStreamReader(javax.xml.stream.XMLInputFactory factory, Object obj) throws XMLStreamException
     {
-        return toXMLStreamReader(factory, RequestContext.getEvent(), obj);
+        return toXMLStreamReader(factory, getCurrentEvent(), obj);
     }
 
     /**
@@ -433,7 +434,7 @@ public class XMLUtils extends org.mule.runtime.core.util.XMLUtils
             OutputHandler handler = ((OutputHandler) src);
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             
-            handler.write(RequestContext.getEvent(), output);
+            handler.write(getCurrentEvent(), output);
             
             return toStreamSource(xmlInputFactory, useStaxSource, new ByteArrayInputStream(output.toByteArray()));
         }

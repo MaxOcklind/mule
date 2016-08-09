@@ -6,7 +6,8 @@
  */
 package org.mule.runtime.module.cxf.support;
 
-import org.mule.runtime.core.RequestContext;
+import static org.mule.runtime.core.DefaultMuleEvent.getCurrentEvent;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.api.security.Authentication;
 import org.mule.runtime.core.api.security.SecurityContext;
 import org.mule.runtime.core.api.security.SecurityProviderNotFoundException;
@@ -53,7 +54,7 @@ public class MuleSecurityManagerValidator implements Validator
           {
               logger.warn("Could not create security context after having successfully authenticated.", e);
           }
-          RequestContext.getEvent().getSession().setSecurityContext(secContext);
+          getCurrentEvent().getSession().setSecurityContext(secContext);
         }
         catch (org.mule.runtime.core.api.security.SecurityException e)
         {

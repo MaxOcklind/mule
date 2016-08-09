@@ -12,12 +12,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
+import static org.mule.runtime.core.DefaultMuleEvent.setCurrentEvent;
 
 import org.mule.compatibility.core.api.endpoint.EndpointBuilder;
 import org.mule.compatibility.core.api.endpoint.ImmutableEndpoint;
 import org.mule.compatibility.core.api.endpoint.InboundEndpoint;
 import org.mule.compatibility.core.endpoint.EndpointURIEndpointBuilder;
-import org.mule.runtime.core.RequestContext;
+import org.mule.runtime.core.DefaultMuleEvent;
 import org.mule.runtime.core.api.MuleEvent;
 import org.mule.runtime.core.api.MuleException;
 import org.mule.runtime.core.api.registry.MuleRegistry;
@@ -69,7 +70,8 @@ public class MuleEventTestCase extends AbstractMuleContextEndpointTestCase
         InboundEndpoint endpoint = getTestInboundEndpoint("Test", null, null,
                 new PayloadTypeFilter(Object.class), null, null);
 
-        MuleEvent event = RequestContext.setEvent(getTestEvent("payload", endpoint));
+        MuleEvent event = getTestEvent("payload", endpoint);
+        setCurrentEvent(event);
 
         Transformer transformer = createSerializableToByteArrayTransformer();
         transformer.setMuleContext(muleContext);
@@ -158,7 +160,8 @@ public class MuleEventTestCase extends AbstractMuleContextEndpointTestCase
         ByteArrayToObject trans = new ByteArrayToObject();
         trans.setMuleContext(muleContext);
 
-        MuleEvent event = RequestContext.setEvent(getTestEvent("payload", endpoint));
+        MuleEvent event = getTestEvent("payload", endpoint);
+        setCurrentEvent(event);
         Serializable serialized = (Serializable) createSerializableToByteArrayTransformer().transform(event);
         assertNotNull(serialized);
 
@@ -190,7 +193,7 @@ public class MuleEventTestCase extends AbstractMuleContextEndpointTestCase
             payload.append("1234567890");
         }
         MuleEvent testEvent = getTestEvent(new ByteArrayInputStream(payload.toString().getBytes()));
-        RequestContext.setEvent(testEvent);
+        setCurrentEvent(testEvent);
         byte[] serializedEvent = muleContext.getObjectSerializer().serialize(testEvent);
         testEvent = muleContext.getObjectSerializer().deserialize(serializedEvent);
 
